@@ -1,18 +1,17 @@
 package com.bridgelabz.quantitymeasurement.controller;
 
-import com.bridgelabz.quantitymeasurement.dto.UnitsDTO;
-import com.bridgelabz.quantitymeasurement.service.IUnitConvertor;
-import com.bridgelabz.quantitymeasurement.service.Unit;
-import com.bridgelabz.quantitymeasurement.service.UnitListService;
+
+import com.bridgelabz.quantitymeasurement.dto.UnitResponseDTO;
+import com.bridgelabz.quantitymeasurement.dto.UnitsRequestDTO;
+import com.bridgelabz.quantitymeasurement.service.IUnitConvertorService;
+import com.bridgelabz.quantitymeasurement.service.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/unitcomparator")
@@ -20,20 +19,26 @@ import java.util.stream.Collectors;
 public class QuantityMeasurementController {
 
     @Autowired
-    IUnitConvertor unitConvertor;
+    IUnitConvertorService unitConvertorService;
 
-    @Autowired
-    UnitListService unitListService;
 
     @PostMapping
-    public ResponseEntity<Double> getUnitData(@Valid @RequestBody UnitsDTO unitsDTO) {
-        double convertedUnit = unitConvertor.getConvertedUnit(unitsDTO);
-        System.out.println(convertedUnit);
-        return new ResponseEntity<Double>(convertedUnit, HttpStatus.OK);
+    public ResponseEntity<UnitResponseDTO> getUnitData(@Valid @RequestBody UnitsRequestDTO unitsRequestDTO) {
+        double convertedUnit = unitConvertorService.getConvertedUnit(unitsRequestDTO);
+        UnitResponseDTO unitResponseDTO = new UnitResponseDTO(convertedUnit,"Response Successful");
+        return new ResponseEntity<UnitResponseDTO>(unitResponseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/{unit}")
-    public List getUnit(@PathVariable String unit) {
-        return unitListService.getUnitList(unit);
+    @GetMapping
+    public List<UnitType> getUnitType() {
+        System.out.println("in method right now");
+        return unitConvertorService.getUnitTypeList();
     }
+    
+    @GetMapping("/{unit}")
+    public List getUnits(@PathVariable String unit) {
+        return unitConvertorService.getUnitList(unit);
+    }
+
+
 }

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/unitcomparator")
+@RequestMapping("/unit")
 @CrossOrigin(origins = "*")
 public class QuantityMeasurementController {
 
@@ -22,22 +22,21 @@ public class QuantityMeasurementController {
     IUnitConvertorService unitConvertorService;
 
 
-    @PostMapping
+    @PostMapping("/converter")
     public ResponseEntity<UnitResponseDTO> getUnitData(@Valid @RequestBody UnitsRequestDTO unitsRequestDTO) {
         double convertedUnit = unitConvertorService.getConvertedUnit(unitsRequestDTO);
         UnitResponseDTO unitResponseDTO = new UnitResponseDTO(convertedUnit,"Response Successful");
         return new ResponseEntity<UnitResponseDTO>(unitResponseDTO, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/unittype")
     public List<UnitType> getUnitType() {
-        System.out.println("in method right now");
         return unitConvertorService.getUnitTypeList();
     }
     
-    @GetMapping("/{unit}")
-    public List getUnits(@PathVariable String unit) {
-        return unitConvertorService.getUnitList(unit);
+    @GetMapping("/{unittype}")
+    public List getUnits(@PathVariable String unittype) {
+        return unitConvertorService.getUnitList(unittype);
     }
 
 

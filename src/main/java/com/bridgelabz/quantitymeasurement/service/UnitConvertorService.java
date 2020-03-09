@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class UnitConvertorService implements IUnitConvertorService {
+
+    @Override
     public double getConvertedUnit(UnitsRequestDTO unitsRequestDTO) {
         if (unitsRequestDTO.firstUnitType.unitType.equals(unitsRequestDTO.secondUnitType.unitType)) {
             System.out.println(unitsRequestDTO.secondUnitType);
@@ -17,12 +19,17 @@ public class UnitConvertorService implements IUnitConvertorService {
         }
         throw new MeasurementException(MeasurementException.Type.TYPE_MISMATCH,"Type Mismatch");
     }
+
+    @Override
     public List getUnitList(String unitType) {
+        if(Unit.values().toString().contains(unitType))
+            System.out.println("key contain");
         return Arrays.stream(Unit.values())
                 .filter(unit -> unit.unitType.toString().equals(unitType))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<UnitType> getUnitTypeList() {
         return Arrays.stream(UnitType.values())
                 .collect(Collectors.toList());

@@ -1,6 +1,7 @@
 package com.bridgelabz.quantitymeasurement.controller;
 
 import com.bridgelabz.quantitymeasurement.dto.UnitsRequestDTO;
+import com.bridgelabz.quantitymeasurement.exception.MeasurementException;
 import com.bridgelabz.quantitymeasurement.service.IUnitConvertorService;
 import com.bridgelabz.quantitymeasurement.service.Unit;
 import com.google.gson.Gson;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -80,16 +82,38 @@ public class QuantityMeasurementControllerTest {
         Assert.assertEquals(400, status);
     }
 
-    /*@Test
-    public void givenUnitsDto_whenWongContent_thenReturnStatus() throws Exception {
+    @Test
+    public void givenUnitsDto_whenWongContent_thenReturnException() throws Exception {
+        try {
+            unitsRequestDTO = new UnitsRequestDTO(0.0, Unit.FEET, Unit.LITRE);
+            when(unitConvertor.getConvertedUnit(unitsRequestDTO)).thenThrow(new MeasurementException(MeasurementException.Type.TYPE_MISMATCH, "Type Mistch"));
+            String unitDtoGson = unitsRequestDTO.toString();
+            System.out.println(unitDtoGson);
+            MvcResult mvcResult = this.mockMvc.perform(post("/unitcomparator").content(unitDtoGson)
+                    .contentType(MediaType.APPLICATION_JSON)).andReturn();
+            int status = mvcResult.getResponse().getStatus();
+        }catch (MeasurementException m){
+            Assert.assertEquals(MeasurementException.Type.TYPE_MISMATCH,m.type);
+        }
+    }
 
-        unitsDTO = new UnitsDTO(12, null, Unit.CM);
-        String unitDtoGson = gson.toJson(unitsDTO);
-        System.out.println(unitDtoGson);
-        MvcResult mvcResult = this.mockMvc.perform(post("/unitcomparator").content(unitDtoGson)
+    @Test
+    public void givenRequest_whenRequestIsGet_thenReturnArray() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/unitcomparator")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         int status = mvcResult.getResponse().getStatus();
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        System.out.println(contentAsString);
         Assert.assertEquals(200, status);
-    }*/
+    }
 
+    @Test
+    public void givenRequest_whenRequestIsGetWithPathvariable_thenReturnArray() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/unitcomparator/LENGHT")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        System.out.println(contentAsString);
+        Assert.assertEquals(200, status);
+    }
 }

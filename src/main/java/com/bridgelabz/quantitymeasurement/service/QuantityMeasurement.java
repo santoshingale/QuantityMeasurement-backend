@@ -29,7 +29,6 @@ public class QuantityMeasurement {
             convertor(this, that);
         } catch (MeasurementException e) {
         }
-        System.out.println(this.measurement + " " + that.measurement);
         return Double.compare(that.measurement, measurement) == 0;
     }
 

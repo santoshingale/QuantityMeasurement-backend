@@ -25,7 +25,7 @@ public class QuantityMeasurementController {
     @PostMapping("/converter")
     public ResponseEntity<UnitResponseDTO> getUnitData(@Valid @RequestBody UnitsRequestDTO unitsRequestDTO) {
         double convertedUnit = unitConvertorService.getConvertedUnit(unitsRequestDTO);
-        UnitResponseDTO unitResponseDTO = new UnitResponseDTO(convertedUnit,"Response Successful");
+        UnitResponseDTO unitResponseDTO = new UnitResponseDTO(convertedUnit, "Response Successful");
         return new ResponseEntity<UnitResponseDTO>(unitResponseDTO, HttpStatus.OK);
     }
 
@@ -33,7 +33,7 @@ public class QuantityMeasurementController {
     public List<UnitType> getUnitType() {
         return unitConvertorService.getUnitTypeList();
     }
-    
+
     @GetMapping("/{unittype}")
     public List getUnits(@PathVariable String unittype) {
         return unitConvertorService.getUnitList(unittype);

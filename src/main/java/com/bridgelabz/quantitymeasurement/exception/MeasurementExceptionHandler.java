@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class MeasurementExceptionHandler {
     @ExceptionHandler(MeasurementException.class)
-    public ResponseEntity measurementExHandkler(MeasurementException e){
+    public ResponseEntity measurementExHandkler(MeasurementException e) {
         return new ResponseEntity(e.message, HttpStatus.BAD_REQUEST);
     }
 }

@@ -16,9 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,7 +43,6 @@ public class QuantityMeasurementControllerTest {
     public void givenUnitsDto_whenRequest_thenReturnStatus200() throws Exception {
         when(unitConvertor.getConvertedUnit(unitsRequestDTO)).thenReturn(0.0);
         String unitDtoGson = gson.toJson(unitsRequestDTO);
-        System.out.println(unitDtoGson);
         MvcResult mvcResult = this.mockMvc.perform(post("/unit/converter").content(unitDtoGson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         int status = mvcResult.getResponse().getStatus();
@@ -69,7 +65,6 @@ public class QuantityMeasurementControllerTest {
     public void givenUnitsDto_whenWrongContentType_thenReturnStatus415() throws Exception {
         when(unitConvertor.getConvertedUnit(unitsRequestDTO)).thenReturn(0.0);
         String unitDtoGson = gson.toJson(unitsRequestDTO);
-        System.out.println(unitDtoGson);
         MvcResult mvcResult = this.mockMvc.perform(post("/unit/converter").content(unitDtoGson)
                 .contentType(MediaType.APPLICATION_XML)).andReturn();
         int status = mvcResult.getResponse().getStatus();
@@ -80,7 +75,6 @@ public class QuantityMeasurementControllerTest {
     public void givenUnitsDto_whenWongContent_thenReturnStatus400() throws Exception {
         when(unitConvertor.getConvertedUnit(unitsRequestDTO)).thenReturn(0.0);
         String unitDtoGson = unitsRequestDTO.toString();
-        System.out.println(unitDtoGson);
         MvcResult mvcResult = this.mockMvc.perform(post("/unit/converter").content(unitDtoGson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         int status = mvcResult.getResponse().getStatus();
@@ -125,7 +119,6 @@ public class QuantityMeasurementControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         int status = mvcResult.getResponse().getStatus();
         String contentAsString = mvcResult.getResponse().getContentAsString();
-        System.out.println(contentAsString);
         Assert.assertEquals(200, status);
     }
 

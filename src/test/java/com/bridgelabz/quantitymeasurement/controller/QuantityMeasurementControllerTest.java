@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -115,4 +116,19 @@ public class QuantityMeasurementControllerTest {
         System.out.println(contentAsString);
         Assert.assertEquals(200, status);
     }
+
+    @Test
+    public void givenRequest_whenRequestIsGetWithInvalidPathvariable_thenThrowException() throws Exception {
+        when(unitConvertor.getUnitList(any())).thenThrow(new MeasurementException(MeasurementException
+                .Type.TYPE_NOT_AVAILABLE, "Type Mistch"));
+        String mvcResult = null;
+        try {
+            mvcResult = this.mockMvc.perform(get("/unit/LENGH")
+                    .contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
+        } catch (MeasurementException e) {
+            Assert.assertEquals(MeasurementException.Type.TYPE_NOT_AVAILABLE, mvcResult);
+        }
+    }
+
+
 }

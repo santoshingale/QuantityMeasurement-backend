@@ -13,20 +13,36 @@ public class UnitConvertorService implements IUnitConvertorService {
 
     @Override
     public double getConvertedUnit(UnitsRequestDTO unitsRequestDTO) {
-        if (unitsRequestDTO.firstUnitType.unitType.equals(unitsRequestDTO.secondUnitType.unitType)) {
+
+        if (unitsRequestDTO.firstUnitType.unitType.equals(unitsRequestDTO.secondUnitType.unitType)
+                && unitsRequestDTO.firstUnitType.unitType != UnitType.TEMPERATURE) {
             System.out.println(unitsRequestDTO.secondUnitType);
             return (unitsRequestDTO.firstUnit * unitsRequestDTO.firstUnitType.unitValue) / unitsRequestDTO.secondUnitType.unitValue;
+        } else if ((unitsRequestDTO.firstUnitType.unitType.equals(unitsRequestDTO.secondUnitType.unitType)
+                && unitsRequestDTO.firstUnitType.unitType == UnitType.TEMPERATURE)) {
+            return this.getConverted(unitsRequestDTO);
         }
-        throw new MeasurementException(MeasurementException.Type.TYPE_MISMATCH,"Type Mismatch");
+        throw new MeasurementException(MeasurementException.Type.TYPE_MISMATCH, "Type Mismatch");
+    }
+
+    private double getConverted(UnitsRequestDTO unitsRequestDTO) {
+        if (unitsRequestDTO.firstUnitType == Unit.CELSIUS && unitsRequestDTO.secondUnitType == Unit.FAHRENHEIT) {
+            return (unitsRequestDTO.firstUnit * unitsRequestDTO.firstUnitType.unitValue) + 32;
+        } else if (unitsRequestDTO.firstUnitType == Unit.FAHRENHEIT && unitsRequestDTO.secondUnitType == Unit.CELSIUS) {
+            return (unitsRequestDTO.firstUnit - 32) * unitsRequestDTO.firstUnitType.unitValue;
+        }
+        return unitsRequestDTO.firstUnit;
     }
 
     @Override
     public List getUnitList(String unitType) {
-        if(Unit.values().toString().contains(unitType))
-            System.out.println("key contain");
-        return Arrays.stream(Unit.values())
+        List<Unit> collect = Arrays.stream(Unit.values())
                 .filter(unit -> unit.unitType.toString().equals(unitType))
                 .collect(Collectors.toList());
+        if (collect.size() > 0) {
+            return collect;
+        }
+        throw new MeasurementException(MeasurementException.Type.TYPE_NOT_AVAILABLE, "This type value does not exist");
     }
 
     @Override

@@ -19,6 +19,13 @@ public class UnitConvertorTest {
     void given12Inch_whenConvetTypeIsFeet_shouldReturn1() {
         when(unitConvertorService.getConvertedUnit(any())).thenReturn(1.0);
         double convertedUnit = unitConvertorService.getConvertedUnit(new UnitsRequestDTO(12, Unit.INCH, Unit.FEET));
-        Assert.assertEquals(1.0,convertedUnit,0);
+        Assert.assertEquals(1.0, convertedUnit, 0);
+    }
+
+    @Test
+    void given32Celsius_whenConvetTypeIsFahrenheit_shouldReturn1() {
+        when(unitConvertorService.getConvertedUnit(any())).thenReturn(89.6);
+        double convertedUnit = unitConvertorService.getConvertedUnit(new UnitsRequestDTO(32, Unit.CELSIUS, Unit.FAHRENHEIT));
+        Assert.assertEquals(89.6, convertedUnit, 0);
     }
 }

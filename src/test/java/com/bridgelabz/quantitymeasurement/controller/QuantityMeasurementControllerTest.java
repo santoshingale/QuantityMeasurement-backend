@@ -16,6 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -101,6 +104,15 @@ public class QuantityMeasurementControllerTest {
     @Test
     public void givenRequest_whenRequestIsGet_thenReturnArray() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(get("/unit/converter")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(200, status);
+    }
+
+    @Test
+    public void givenRequestUnittype_whenRequestIsGet_thenReturnArray() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/unit/unittype")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         int status = mvcResult.getResponse().getStatus();
         String contentAsString = mvcResult.getResponse().getContentAsString();
